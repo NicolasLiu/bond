@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/bond?useUnicode=true&allowMultiQueries=true
+    username: username
+    password: password
+
+
