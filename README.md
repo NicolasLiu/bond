@@ -28,7 +28,7 @@ npm run build
 ```
 ### 运行配置
 修改front目录下的vite.config.ts配置文件:
-``` json
+``` ts
 server: {
     host: '127.0.0.1', //绑定ip
     port: 80, //监听端口
