@@ -322,10 +322,10 @@ const filterPositionStatus = (value: string, row: any) => {
 	return row.status === value
 };
 
-const allocation = [];
-const selectedApply = ref();
+const allocation:AllocationItem[][] = [];
+const selectedApply = ref<ApplyItem>();
 
-const handleApplySelect = (val: ApplyItem | undefined) => {
+const handleApplySelect = (val: ApplyItem) => {
 	selectedApply.value = val;
 	if (!selectedApply.value) {
 		allocationData.value = [];
@@ -342,7 +342,7 @@ const handleApplySelect = (val: ApplyItem | undefined) => {
 			var orders = res.data;
 			allocationData.value = [];
 			for (var i in orders) {
-				var tmp_position = null;
+				var tmp_position = positionData.value[0];
 				for (var j in positionData.value) {
 					if (positionData.value[j].id == orders[i].position) {
 						tmp_position = positionData.value[j];
@@ -350,9 +350,9 @@ const handleApplySelect = (val: ApplyItem | undefined) => {
 					}
 
 				}
-				allocationData.value.push({ id: orders[i].id, apply: selectedApply.value, position: tmp_position, value: orders[i].value });
+				allocationData.value.push({ id: orders[i].id, apply: val, position: tmp_position, value: orders[i].value });
 			}
-			allocation[selectedApply.value.id] = allocationData.value;
+			allocation[val.id] = allocationData.value;
 		});
 
 	}
@@ -369,8 +369,8 @@ const autoManage = () => {
 			}
 		}
 		for (var i in orders) {
-			var tmp_apply = null;
-			var tmp_position = null;
+			var tmp_apply = applyData.value[0];
+			var tmp_position = positionData.value[0];
 			for (var j in applyData.value) {
 				if (applyData.value[j].id == orders[i].apply) {
 					tmp_apply = applyData.value[j];
@@ -384,6 +384,9 @@ const autoManage = () => {
 					break;
 				}
 
+			}
+			if (!tmp_position) {
+				return;
 			}
 			tmp_position.value = tmp_position.value - orders[i].value;
 			allocation[tmp_apply.id].push({ id: orders[i].id, apply: tmp_apply, position: tmp_position, value: orders[i].value });
@@ -417,7 +420,7 @@ const handleUse = (index: number, row: any) => {
 	}
 	var p_max = row.value;
 	row.value = row.value - Math.min(p_max, last);
-	allocationData.value.push({ position: row, apply: selectedApply.value, value: Math.min(p_max, last) });
+	allocationData.value.push({ id: 0, position: row, apply: selectedApply.value, value: Math.min(p_max, last) });
 };
 
 let form = reactive({
@@ -470,10 +473,13 @@ const handleCancelOrder = () => {
 	}).then(() => {
 		cancelOrder({ apply: selectedApply.value }).then(res => {
 			if (res.data === 1) {
-				allocation[selectedApply.value.id] = [];
-				getApplyData();
-				getPositionData();
-				ElMessage.success('取消分配成功');
+				if (selectedApply.value != undefined) {
+					allocation[selectedApply.value.id] = [];
+					getApplyData();
+					getPositionData();
+					ElMessage.success('取消分配成功');
+				}
+
 			}
 		});
 

@@ -97,7 +97,7 @@
 					<el-col :span="16">
 						<el-form-item label="起止日期" label-width="100px" prop="date">
 							<el-date-picker v-model="form.date" type="daterange" range-separator="到"
-								start-placeholder="交易日" end-placeholder="到期日" @change="calcDuration(form.date)" />
+								start-placeholder="交易日" end-placeholder="到期日" @change="calcDuration()" />
 						</el-form-item>
 
 					</el-col>
@@ -209,7 +209,7 @@
 					<el-col :span="16">
 						<el-form-item label="起止日期" label-width="100px" prop="date">
 							<el-date-picker v-model="form.date" type="daterange" range-separator="到"
-								start-placeholder="交易日" end-placeholder="到期日" @change="calcDuration(form.date)" />
+								start-placeholder="交易日" end-placeholder="到期日" @change="calcDuration()" />
 						</el-form-item>
 
 					</el-col>
@@ -359,15 +359,15 @@ const handleDelete = (index: number) => {
 const editVisible = ref(false);
 const addVisible = ref(false);
 let form = reactive({
-	id: null,
-	account: null,
+	id: 0,
+	account: 0,
 	status: '',
 	opponent: '',
-	date: '',
+	date: [new Date(),new Date()],
 	temporary_opponent: '',
 	trader: '',
 	financing_type: '',
-	financing_rate: '',
+	financing_rate: 0,
 	clearing_speed: '',
 	initial_settlement_method: '',
 	expiry_settlement_method: '',
@@ -381,14 +381,14 @@ let form = reactive({
 	emergency: 0,
 });
 const handleAdd = () => {
-	form.id = null;
+	form.id = 0;
 	form.account = 1;
 	form.status = '待排券';
 	form.opponent = '';
 	form.trader = '';
 	form.temporary_opponent = '';
 	form.financing_type = '';
-	form.financing_rate = '';
+	form.financing_rate = 0;
 	form.clearing_speed = '';
 	form.initial_settlement_method = '';
 	form.expiry_settlement_method = '';
@@ -468,7 +468,7 @@ const saveAdd = () => {
 };
 const calcDuration = () => {
 	if (!form.date) return;
-	var day = (form.date[1] - form.date[0]) / (1000 * 60 * 60 * 24);
+	var day = (form.date[1].getTime() - form.date[0].getTime()) / (1000 * 60 * 60 * 24);
 	form.duration = day;
 };
 </script>
