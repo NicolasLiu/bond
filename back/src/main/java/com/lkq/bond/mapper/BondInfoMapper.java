@@ -20,7 +20,7 @@ public interface BondInfoMapper {
 
 
 
-  @Select("select * from bond_info where bond_code=#{code}")
+  @Select("select * from bond_info where bond_code like '${code}%'")
   public BondInfo getBondInfoByCode(String code);
 
   @Insert("insert into bond_info(bond_code,bond_trading_market,short_name) values(#{bond_code},#{bond_trading_market},#{short_name})")

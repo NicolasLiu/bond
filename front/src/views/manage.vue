@@ -24,6 +24,7 @@
 						</template>
 					</el-table-column>
 					<el-table-column prop="value" label="交易金额（万元）" align="center" sortable></el-table-column>
+					<el-table-column prop="discount_rate" label="折价率" align="center"></el-table-column>
 					<el-table-column prop="financing_type" label="融资类型" align="center"></el-table-column>
 					<el-table-column prop="financing_rate" label="融资利率" align="center" sortable></el-table-column>
 					<el-table-column prop="opponent" label="交易对手" align="center"></el-table-column>
@@ -126,7 +127,9 @@
 							header-cell-class-name="table-header" show-summary :summary-method="getAllocationSummaries">
 							<el-table-column prop="position.code" label="债券代码" align="center"></el-table-column>
 							<el-table-column prop="position.name" label="债券名称" align="center"></el-table-column>
-							<el-table-column prop="value" label="分配金额（万元）" align="center"></el-table-column>
+							<el-table-column prop="value" label="分配金额（万元）" align="center" width="100"></el-table-column>
+							<el-table-column prop="discount_rate" label="折价率" align="center" width="60"></el-table-column>
+							<el-table-column prop="discount_value" label="折价金额（万元）" align="center" width="100"></el-table-column>
 
 
 							<el-table-column label="操作" width="220" align="center" fixed="right">
@@ -198,6 +201,7 @@ interface ApplyItem {
 	opponent: string;
 	temporary_opponent: string;
 	trader: string;
+	discount_rate:number;
 	financing_type: string;
 	financing_rate: number;
 	clearing_speed: string;
@@ -268,6 +272,8 @@ interface AllocationItem {
 	position: PositionItem;
 	apply: ApplyItem;
 	value: number;
+	discount_rate: number;
+	discount_value: number;
 }
 
 interface SummaryMethodProps<T = AllocationItem> {
@@ -359,7 +365,7 @@ const handleApplySelect = (val: ApplyItem) => {
 					}
 
 				}
-				allocationData.value.push({ id: orders[i].id, apply: val, position: tmp_position, value: orders[i].value });
+				allocationData.value.push({ id: orders[i].id, apply: val, position: tmp_position, value: orders[i].value, discount_rate:orders[i].discount_rate, discount_value:orders[i].discount_value });
 			}
 			allocation[val.id] = allocationData.value;
 		});
@@ -398,7 +404,7 @@ const autoManage = () => {
 				return;
 			}
 			tmp_position.value = tmp_position.value - orders[i].value;
-			allocation[tmp_apply.id].push({ id: orders[i].id, apply: tmp_apply, position: tmp_position, value: orders[i].value });
+			allocation[tmp_apply.id].push({ id: orders[i].id, apply: tmp_apply, position: tmp_position, value: orders[i].value, discount_rate:orders[i].discount_rate, discount_value:orders[i].discount_value });
 		}
 		ElMessage.success('自动排券完成');
 	});
@@ -416,7 +422,7 @@ const handleUse = (index: number, row: any) => {
 		if (row.id == allocationData.value[item].id) {
 			used = true;
 		}
-		allocation_value = allocation_value + allocationData.value[item].value;
+		allocation_value = allocation_value + allocationData.value[item].discount_value;
 
 	}
 	if (used) {
@@ -424,12 +430,16 @@ const handleUse = (index: number, row: any) => {
 	}
 
 	var last = selectedApply.value.value - allocation_value;
+	last = last / selectedApply.value.discount_rate;
 	if (last <= 0) {
 		last = 0;
 	}
 	var p_max = row.value;
-	row.value = row.value - Math.min(p_max, last);
-	allocationData.value.push({ id: 0, position: row, apply: selectedApply.value, value: Math.min(p_max, last) });
+	var alloc_v = Math.min(p_max, last);
+	row.value = row.value - alloc_v;
+	var discount_v = alloc_v * selectedApply.value.discount_rate;
+	allocationData.value.push({ id: 0, position: row, apply: selectedApply.value, value: alloc_v, discount_rate:selectedApply.value.discount_rate, discount_value:discount_v});
+	console.log(allocationData.value);
 };
 
 let form = reactive({
@@ -439,7 +449,9 @@ let form = reactive({
 const editVisible = ref(false);
 let idx: number = -1;
 let old_value = 0;
+let cur_row = null;
 const handleEditAllocation = (index: number, row: any) => {
+	cur_row = row;
 	idx = index;
 	old_value = row.value;
 	form.value = row.value;
@@ -448,8 +460,9 @@ const handleEditAllocation = (index: number, row: any) => {
 };
 
 const saveEdit = () => {
-	allocationData.value[idx].value = form.value;
-	allocationData.value[idx].position.value = allocationData.value[idx].position.value + old_value - form.value;
+	allocationData.value[idx].value = Number(form.value);
+	allocationData.value[idx].position.value = allocationData.value[idx].position.value + old_value - Number(form.value);
+	cur_row.discount_value = Number(form.value) * cur_row.discount_rate;
 	editVisible.value = false;
 
 };
@@ -502,18 +515,22 @@ const getAllocationSummaries = (param: SummaryMethodProps) => {
 	var sumValue = 0;
 
 	data.forEach((d) => {
-		sumValue += Number(d.value);
+		sumValue += Number(d.discount_value);
 	});
 	columns.forEach((column, index) => {
 		if (index === 0) {
 			sums[index] = '合计';
 			return;
 		}
-		if (index === 2) {
+		if (index === 4) {
+			sums[index] = sumValue;
+			return;
+		}
+		if (index === 5) {
 			if (selectedApply.value == undefined) {
 				return;
 			}
-			sums[index] = sumValue + " / " + selectedApply.value.value;
+			sums[index] =  " 目标金额： " + selectedApply.value.value;
 			return;
 		}
 	})

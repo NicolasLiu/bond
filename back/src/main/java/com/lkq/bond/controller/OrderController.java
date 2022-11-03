@@ -9,6 +9,7 @@ import com.lkq.bond.entity.Position;
 import com.lkq.bond.mapper.ApplyMapper;
 import com.lkq.bond.mapper.OrderMapper;
 import com.lkq.bond.mapper.PositionMapper;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,6 +98,7 @@ public class OrderController {
   private List<Order> createOrderForApply(Apply apply, List<Position> all_positions) {
     List<Order> rtn = new ArrayList<>();
     double sum_value = apply.value;
+    double discount_rate = apply.discount_rate;
     for (Position position : all_positions) {
       if (sum_value <= 0) {
         break;
@@ -107,13 +109,15 @@ public class OrderController {
       Order o = new Order();
       o.apply = apply.id;
       o.position = position.id;
-      if (position.value >= sum_value) {
-        o.value = sum_value;
+      o.discount_rate = discount_rate;
+      if (position.value*discount_rate >= sum_value) {
+        o.value = new BigDecimal(sum_value / discount_rate).setScale(0, BigDecimal.ROUND_UP).doubleValue();
       } else {
         o.value = position.value;
       }
+      o.discount_value = new BigDecimal(o.value * discount_rate).setScale(0, BigDecimal.ROUND_DOWN).doubleValue();
       position.value = position.value - o.value;
-      sum_value = sum_value - o.value;
+      sum_value = sum_value - o.discount_value;
       rtn.add(o);
     }
     return rtn;

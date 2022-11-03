@@ -45,6 +45,7 @@ CREATE TABLE `apply` (
   `opponent` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `temporary_opponent` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `trader` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `discount_rate` double DEFAULT NULL,
   `financing_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `financing_rate` double DEFAULT NULL,
   `clearing_speed` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -101,35 +102,13 @@ CREATE TABLE `bond_info` (
   `rating_agency` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `have_credit` tinyint(1) DEFAULT NULL,
   `same_bonds_in_diff_market` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `issuer_name` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`bond_code`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of bond_info
 -- ----------------------------
-INSERT INTO `bond_info` VALUES ('132100052', '', '21重庆轨交GN003(碳中和债)', '2026-05-11 00:00:00', '重庆市轨道交通(集团)有限公司2021年度第三期绿色中期票据(碳中和债)', '企业债', null, null, 'AAA', 'AAA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('102101455', '', '21南京交建MTN003', '2026-08-04 00:00:00', '南京市交通建设投资控股(集团)有限责任公司2021年度第三期中期票据', '企业债', null, null, 'AA', 'AA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('102100237', '', '21川铁投MTN003', null, null, '企业债', null, null, 'AA+', 'AA+', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('2205028', '', '22北京债06', null, null, '地方政府债', null, null, 'AA+', 'AA+', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('2105244', '', '21江苏债09', null, null, '地方政府债', null, null, 'AA', 'AA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('2205029', '', '22北京债07', null, null, '地方政府债', null, null, 'AA+', 'AA+', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('2280250', '', '22金桥债01', null, null, '企业债', null, null, 'AA', 'AA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('2180370', '', '21山能债02', null, null, '企业债', null, null, 'AA+', 'AA+', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('102281087', '', '22大唐新能MTN001', null, null, '企业债', null, null, 'AAA', 'AAA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('102280888', '', '22皖出版MTN002', null, null, '企业债', null, null, 'AAA', 'AAA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('102282010', '', '22中电国际MTN004', null, null, '企业债', null, null, 'AAA', 'AAA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('032100339', '', '21江阴城投PPN003', null, null, '企业债', null, null, 'AA+', 'AA+', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('032100189', '', '21富阳城投PPN001', null, null, '企业债', null, null, 'AAA', 'AAA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('031900114', '', '19南昌水投PPN001', null, null, '企业债', null, null, 'AAA', 'AAA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('220215', '', '22国开15', null, null, '国债', null, null, 'AAA', 'AAA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('102282143', '', '22浦东开发MTN001', null, null, '企业债', null, null, 'AA+', 'AA+', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('220016', '', '22附息国债16', null, null, '国债', null, null, 'AAA', 'AAA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('2271504', '', '22广东债44', null, null, '地方政府债', null, null, 'AAA', 'AAA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('102001276', '', '20大唐发电MTN002', null, null, '企业债', null, null, 'AA', 'AA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('102001222', '', '20华能MTN002', null, null, '企业债', null, null, 'AA', 'AA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('102000871', '', '20招商局MTN001A', null, null, '企业债', null, null, 'AA+', 'AA+', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('102000761', '', '20保利发展MTN003', null, null, '企业债', null, null, 'AA+', 'AA+', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
-INSERT INTO `bond_info` VALUES ('082280730', '', '22蓉交投ABN002优先', null, null, '企业债', null, null, 'AA', 'AA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 
 -- ----------------------------
 -- Table structure for orders
@@ -140,6 +119,8 @@ CREATE TABLE `orders` (
   `apply` int DEFAULT NULL,
   `position` int DEFAULT NULL,
   `value` double DEFAULT NULL,
+  `discount_rate` double DEFAULT NULL,
+  `discount_value` double DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

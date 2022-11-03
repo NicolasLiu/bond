@@ -31,7 +31,7 @@ public interface ApplyMapper {
 
   @Update("update apply set status=#{status},account=#{account.id}," +
       "opponent=#{opponent},temporary_opponent=#{temporary_opponent}," +
-      "trader=#{trader},financing_type=#{financing_type}," +
+      "trader=#{trader},discount_rate=#{discount_rate},financing_type=#{financing_type}," +
       "financing_rate=#{financing_rate},clearing_speed=#{clearing_speed}," +
       "initial_settlement_method=#{initial_settlement_method}," +
       "expiry_settlement_method=#{expiry_settlement_method},value=#{value}, " +
@@ -42,10 +42,10 @@ public interface ApplyMapper {
    @Delete("delete from apply where id = #{id}")
    public int deleteApplyById(int id);
 
-   @Insert("insert into apply(status,account,opponent,temporary_opponent,trader,financing_type," +
+   @Insert("insert into apply(status,account,opponent,temporary_opponent,trader,discount_rate,financing_type," +
        "financing_rate,clearing_speed,initial_settlement_method,expiry_settlement_method,value," +
        "duration,recording_day,trading_day,maturity_day,aim,mark,emergency) values(#{status}, " +
-       "#{account.id},#{opponent},#{temporary_opponent},#{trader},#{financing_type},#{financing_rate}," +
+       "#{account.id},#{opponent},#{temporary_opponent},#{trader},#{discount_rate},#{financing_type},#{financing_rate}," +
        "#{clearing_speed},#{initial_settlement_method},#{expiry_settlement_method},#{value},#{duration}," +
        "#{recording_day, jdbcType=DATE},#{trading_day, jdbcType=DATE},#{maturity_day, jdbcType=DATE}," +
        "#{aim},#{mark},#{emergency})")

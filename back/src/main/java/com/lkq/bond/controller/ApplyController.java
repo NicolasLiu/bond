@@ -39,6 +39,7 @@ public class ApplyController {
     apply.opponent = object.get("opponent").getAsString();
     apply.temporary_opponent = object.get("temporary_opponent").getAsString();
     apply.trader = object.get("trader").getAsString();
+    apply.discount_rate = object.get("discount_rate").getAsDouble();
     apply.financing_type = object.get("financing_type").getAsString();
     apply.financing_rate = object.get("financing_rate").getAsDouble();
     apply.clearing_speed = object.get("clearing_speed").getAsString();
@@ -73,6 +74,7 @@ public class ApplyController {
     apply.opponent = object.get("opponent").getAsString();
     apply.temporary_opponent = object.get("temporary_opponent").getAsString();
     apply.trader = object.get("trader").getAsString();
+    apply.discount_rate = object.get("discount_rate").getAsDouble();
     apply.financing_type = object.get("financing_type").getAsString();
     apply.financing_rate = object.get("financing_rate").getAsDouble();
     apply.clearing_speed = object.get("clearing_speed").getAsString();

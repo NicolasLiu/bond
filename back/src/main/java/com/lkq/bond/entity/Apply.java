@@ -9,6 +9,7 @@ public class Apply {
   public String opponent;
   public String temporary_opponent;
   public String trader;
+  public double discount_rate;
   public String financing_type;
   public double financing_rate;
   public String clearing_speed;

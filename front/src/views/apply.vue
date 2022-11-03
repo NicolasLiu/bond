@@ -8,6 +8,7 @@
 				<el-table-column prop="id" label="ID" width="40" align="center"></el-table-column>
 				<el-table-column prop="status" label="状态" align="center"></el-table-column>
 				<el-table-column prop="value" label="交易金额（万元）" align="center"></el-table-column>
+				<el-table-column prop="discount_rate" label="折价率" align="center"></el-table-column>
 				<el-table-column prop="financing_type" label="融资类型" align="center"></el-table-column>
 				<el-table-column prop="financing_rate" label="融资利率" align="center"></el-table-column>
 				<el-table-column prop="opponent" label="交易对手" align="center"></el-table-column>
@@ -129,9 +130,10 @@
 					</el-col>
 				</el-form-item>
 				<el-form-item>
+
 					<el-col :span="8">
-						<el-form-item label="是否紧急" label-width="100px" prop="emergency">
-							<el-switch v-model="form.emergency" :active-value="1" :inactive-value="0"></el-switch>
+						<el-form-item label="折价率" label-width="100px" prop="discount_rate">
+							<el-input v-model="form.discount_rate" placeholder="e.g. 0.8"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
@@ -145,6 +147,13 @@
 						<el-form-item label="备注" label-width="100px" prop="mark">
 							<el-input type="textarea" :autosize="{ minRows: 1, maxRows: 4 }" v-model="form.mark">
 							</el-input>
+						</el-form-item>
+					</el-col>
+				</el-form-item>
+				<el-form-item>
+					<el-col :span="8">
+						<el-form-item label="是否紧急" label-width="100px" prop="emergency">
+							<el-switch v-model="form.emergency" :active-value="1" :inactive-value="0"></el-switch>
 						</el-form-item>
 					</el-col>
 				</el-form-item>
@@ -241,9 +250,10 @@
 					</el-col>
 				</el-form-item>
 				<el-form-item>
+
 					<el-col :span="8">
-						<el-form-item label="是否紧急" label-width="100px" prop="emergency">
-							<el-switch v-model="form.emergency" :active-value="1" :inactive-value="0"></el-switch>
+						<el-form-item label="折价率" label-width="100px" prop="discount_rate">
+							<el-input v-model="form.discount_rate" placeholder="e.g. 0.8"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
@@ -257,6 +267,13 @@
 						<el-form-item label="备注" label-width="100px" prop="mark">
 							<el-input type="textarea" :autosize="{ minRows: 1, maxRows: 4 }" v-model="form.mark">
 							</el-input>
+						</el-form-item>
+					</el-col>
+				</el-form-item>
+				<el-form-item>
+					<el-col :span="8">
+						<el-form-item label="是否紧急" label-width="100px" prop="emergency">
+							<el-switch v-model="form.emergency" :active-value="1" :inactive-value="0"></el-switch>
 						</el-form-item>
 					</el-col>
 				</el-form-item>
@@ -294,6 +311,7 @@ interface TableItem {
 	opponent: string;
 	temporary_opponent: string;
 	trader: string;
+	discount_rate: number;
 	financing_type: string;
 	financing_rate: number;
 	clearing_speed: string;
@@ -363,9 +381,10 @@ let form = reactive({
 	account: 0,
 	status: '',
 	opponent: '',
-	date: [new Date(),new Date()],
+	date: [new Date(), new Date()],
 	temporary_opponent: '',
 	trader: '',
+	discount_rate: 1,
 	financing_type: '',
 	financing_rate: 0,
 	clearing_speed: '',
@@ -387,6 +406,7 @@ const handleAdd = () => {
 	form.opponent = '';
 	form.trader = '';
 	form.temporary_opponent = '';
+	form.discount_rate = 1;
 	form.financing_type = '';
 	form.financing_rate = 0;
 	form.clearing_speed = '';
@@ -411,6 +431,7 @@ const handleEdit = (index: number, row: any) => {
 	form.opponent = row.opponent;
 	form.trader = row.trader;
 	form.temporary_opponent = row.temporary_opponent;
+	form.discount_rate = row.discount_rate;
 	form.financing_type = row.financing_type;
 	form.financing_rate = row.financing_rate;
 	form.clearing_speed = row.clearing_speed;
@@ -438,6 +459,7 @@ const saveEdit = () => {
 	tableData.value[idx].opponent = form.opponent;
 	tableData.value[idx].trader = form.trader;
 	tableData.value[idx].temporary_opponent = form.temporary_opponent;
+	tableData.value[idx].discount_rate = form.discount_rate;
 	tableData.value[idx].financing_type = form.financing_type;
 	tableData.value[idx].financing_rate = form.financing_rate;
 	tableData.value[idx].clearing_speed = form.clearing_speed;
@@ -453,7 +475,7 @@ const saveEdit = () => {
 
 };
 const saveAdd = () => {
-	
+
 	form.trading_day = form.date[0].toLocaleDateString();
 	form.maturity_day = form.date[1].toLocaleDateString();
 	addApply(form).then(res => {
@@ -463,7 +485,7 @@ const saveAdd = () => {
 			getData();
 		}
 	});
-	
+
 
 };
 const calcDuration = () => {
