@@ -12,14 +12,15 @@
 					highlight-current-row @current-change="handleApplySelect" :max-height="400">
 					<el-table-column prop="id" label="ID" width="40" align="center"></el-table-column>
 					<el-table-column prop="status" label="状态" align="center" :filters="[
-					  { text: '待排券', value: '待排券' },
-					  { text: '已排券', value: '已排券' },
+						{ text: '待排券', value: '待排券' },
+						{ text: '已排券', value: '已排券' },
 					]" :filter-method="filterApplyStatus">
 						<template #default="scope">
 							<el-tag v-if="scope.row.status === '待排券'" effect="dark" round>{{ scope.row.status }}
 							</el-tag>
 							<el-tag v-if="scope.row.status === '已排券'" type="success" effect="dark" round>{{
-							scope.row.status }}</el-tag>
+									scope.row.status
+							}}</el-tag>
 						</template>
 					</el-table-column>
 					<el-table-column prop="value" label="交易金额（万元）" align="center" sortable></el-table-column>
@@ -38,8 +39,8 @@
 					<el-table-column prop="maturity_day" width="100" label="到期日" align="center"></el-table-column>
 					<el-table-column prop="account.name" label="录入人" align="center"></el-table-column>
 					<el-table-column prop="emergency" label="是否紧急" align="center" :filters="[
-					  { text: '紧急', value: 1 },
-					  { text: '正常', value: 0 },
+						{ text: '紧急', value: 1 },
+						{ text: '正常', value: 0 },
 					]" :filter-method="filterApplyEmergency">
 						<template #default="scope">
 							<el-tag v-if="scope.row.emergency === 1" type="danger" effect="dark" round>紧急</el-tag>
@@ -60,8 +61,8 @@
 							<div class="card-header">
 								<span>持仓情况</span>
 								<el-upload ref="uploadRef" accept=".xls, .xlsx" v-model:file-list="fileList"
-									action="http://127.0.0.1:8080/position/upload" :limit="1"
-									:auto-upload="false" :on-success="uploadSuccess">
+									action="http://127.0.0.1:8080/position/upload" :limit="1" :auto-upload="false"
+									:on-success="uploadSuccess">
 									<template #trigger>
 										<el-button type="primary" style="margin-right:10px;">选择持仓文件</el-button>
 									</template>
@@ -74,32 +75,33 @@
 						<el-table :data="positionData" border class="table" ref="positionTable"
 							header-cell-class-name="table-header" :max-height="400">
 							<el-table-column prop="bond_info.bond_code" label="债券代码" align="center"></el-table-column>
-							<el-table-column prop="bond_info.short_name" label="债券名称" width="150" align="center" ></el-table-column>
+							<el-table-column prop="bond_info.short_name" label="债券名称" width="150" align="center">
+							</el-table-column>
 							<el-table-column prop="account.name" label="账户名称" width="100" align="center">
 							</el-table-column>
 							<el-table-column prop="value" label="可用金额（万元）" width="100" align="center" sortable>
 							</el-table-column>
 							<el-table-column prop="status" label="状态" width="100" align="center" :filters="[
-							  { text: '可用', value: '可用' },
-							  { text: '今日到期', value: '今日到期' },
+								{ text: '可用', value: '可用' },
+								{ text: '今日到期', value: '今日到期' },
 							]" :filter-method="filterPositionStatus"></el-table-column>
-							
+
 							<el-table-column prop="bond_info.institution_credit" label="主体评级" align="center" :filters="[
-							  { text: 'AA', value: 'AA' },
-							  { text: 'AA+', value: 'AA+' },
-							  { text: 'AAA', value: 'AAA' },
+								{ text: 'AA', value: 'AA' },
+								{ text: 'AA+', value: 'AA+' },
+								{ text: 'AAA', value: 'AAA' },
 							]" :filter-method="filterPositionInstitutionCredit"></el-table-column>
 							<el-table-column prop="bond_info.bond_credit" label="债项评级" align="center" :filters="[
-							  { text: 'AA', value: 'AA' },
-							  { text: 'AA+', value: 'AA+' },
-							  { text: 'AAA', value: 'AAA' },
+								{ text: 'AA', value: 'AA' },
+								{ text: 'AA+', value: 'AA+' },
+								{ text: 'AAA', value: 'AAA' },
 							]" :filter-method="filterPositionBondCredit"></el-table-column>
 							<el-table-column prop="bond_info.bond_type" label="债券类型" align="center" :filters="[
-							  { text: '国债', value: '国债' },
-							  { text: '地方政府债', value: '地方政府债' },
-							  { text: '政策性金融债', value: '政策性金融债' },
-							  { text: '政府支持债券', value: '政府支持债券' },
-							  { text: '企业债', value: '企业债' },
+								{ text: '国债', value: '国债' },
+								{ text: '地方政府债', value: '地方政府债' },
+								{ text: '政策性金融债', value: '政策性金融债' },
+								{ text: '政府支持债券', value: '政府支持债券' },
+								{ text: '企业债', value: '企业债' },
 							]" :filter-method="filterPositionType"></el-table-column>
 							<el-table-column prop="bond_info.maturity" width="100" label="到期日" align="center">
 							</el-table-column>
@@ -108,7 +110,8 @@
 
 							<el-table-column label="操作" width="110" align="center" fixed="right">
 								<template #default="scope">
-									<el-button text icon="Check" class="red" @click="handleUse(scope.$index, scope.row)">
+									<el-button text icon="Check" class="red"
+										@click="handleUse(scope.$index, scope.row)">
 										使用
 									</el-button>
 								</template>
@@ -119,8 +122,8 @@
 
 				<el-col :span="12">
 					<el-card header="分配情况" class="box-card">
-						<el-table :data="allocationData" border class="table" ref=""
-							header-cell-class-name="table-header">
+						<el-table :data="allocationData" border class="table" ref="allocTable"
+							header-cell-class-name="table-header" show-summary :summary-method="getAllocationSummaries">
 							<el-table-column prop="position.code" label="债券代码" align="center"></el-table-column>
 							<el-table-column prop="position.name" label="债券名称" align="center"></el-table-column>
 							<el-table-column prop="value" label="分配金额（万元）" align="center"></el-table-column>
@@ -144,6 +147,7 @@
 								type="primary" @click="handleCreateOrder" style="margin-top: 10px;">分配</el-button>
 							<el-button v-if="selectedApply != undefined && selectedApply.status == '已排券'" type="danger"
 								icon="Close" @click="handleCancelOrder" style="margin-top: 10px;">取消分配</el-button>
+
 						</div>
 					</el-card>
 				</el-col>
@@ -174,7 +178,7 @@ import { ElMessage, ElMessageBox, UploadUserFile } from 'element-plus';
 import type { UploadInstance } from 'element-plus'
 import { Delete, Edit, Search, Plus } from '@element-plus/icons-vue';
 import { getAllApply, getPosition, createOrder, cancelOrder, getOrder, autoCreateOrder } from '../api/index';
-
+import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults';
 
 const fileList = ref<UploadUserFile[]>([]);
 
@@ -266,6 +270,11 @@ interface AllocationItem {
 	value: number;
 }
 
+interface SummaryMethodProps<T = Product> {
+	columns: TableColumnCtx<T>[]
+	data: T[]
+}
+
 const applyData = ref<ApplyItem[]>([]);
 const positionData = ref<PositionItem[]>([]);
 const allocationData = ref<AllocationItem[]>([]);
@@ -322,7 +331,7 @@ const filterPositionStatus = (value: string, row: any) => {
 	return row.status === value
 };
 
-const allocation:AllocationItem[][] = [];
+const allocation: AllocationItem[][] = [];
 const selectedApply = ref<ApplyItem>();
 
 const handleApplySelect = (val: ApplyItem) => {
@@ -487,6 +496,29 @@ const handleCancelOrder = () => {
 	}).catch(() => { });
 };
 
+const getAllocationSummaries = (param: SummaryMethodProps) => {
+	const { columns, data } = param;
+	const sums: string[] = [];
+	var sumValue = 0;
+
+	data.forEach((d) => {
+		sumValue += Number(d.value);
+	});
+	columns.forEach((column, index) => {
+		if (index === 0) {
+			sums[index] = '合计';
+			return;
+		}
+		if (index === 2) {
+			if (selectedApply.value == undefined) {
+				return;
+			}
+			sums[index] = sumValue + " / " + selectedApply.value.value;
+			return;
+		}
+	})
+	return sums;
+};
 </script>
 
 <style scoped>
