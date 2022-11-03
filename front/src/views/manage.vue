@@ -77,7 +77,7 @@
 							<el-table-column prop="bond_info.bond_code" label="债券代码" align="center"></el-table-column>
 							<el-table-column prop="bond_info.short_name" label="债券名称" width="150" align="center">
 							</el-table-column>
-							<el-table-column prop="account.name" label="账户名称" width="100" align="center">
+							<el-table-column prop="account.name" label="账户名称" width="100" align="center" sortable :sort-by="['account.name','value']">
 							</el-table-column>
 							<el-table-column prop="value" label="可用金额（万元）" width="100" align="center" sortable>
 							</el-table-column>
@@ -270,7 +270,7 @@ interface AllocationItem {
 	value: number;
 }
 
-interface SummaryMethodProps<T = Product> {
+interface SummaryMethodProps<T = AllocationItem> {
 	columns: TableColumnCtx<T>[]
 	data: T[]
 }
