@@ -84,29 +84,106 @@
 								{ text: '非0', value: '非0' }
 							]" :filtered-value="['非0']">
 							</el-table-column>
+							
+							<el-table-column prop="bond_info.bond_trading_market" label="场所" width="100" align="center" :filters="[
+								{ text: 'IB', value: 'IB' },
+								{ text: 'SH', value: 'SH' },
+								{ text: 'SZ', value: 'SZ' },
+							]" :filter-method="filterPositionMarket"></el-table-column>
+
+							<el-table-column prop="bond_info.institution_credit" label="主体评级" align="center" :filters="[
+								{ text: 'A+', value:'A+' },
+								{ text: '0', value:'0' },
+								{ text: 'AAA', value:'AAA' },
+								{ text: 'AA+', value:'AA+' },
+								{ text: 'AA', value:'AA' },
+								{ text: 'BBB', value:'BBB' },
+								{ text: 'Baa1', value:'Baa1' },
+								{ text: 'AA+pi', value:'AA+pi' },
+								{ text: 'BB+', value:'BB+' },
+								{ text: 'Baa3', value:'Baa3' },
+								{ text: 'AAApi', value:'AAApi' },
+								{ text: 'BBB-', value:'BBB-' },
+								{ text: 'BBB+', value:'BBB+' },
+								{ text: 'A1', value:'A1' },
+								{ text: 'Ba2', value:'Ba2' },
+								{ text: 'Ba1', value:'Ba1' },
+								{ text: 'AApi', value:'AApi' },
+								{ text: 'A3', value:'A3' },
+								{ text: 'A-', value:'A-' },
+								{ text: 'AA-', value:'AA-' },
+								{ text: 'A', value:'A' },
+								{ text: 'B-', value:'B-' },
+								{ text: 'C', value:'C' },
+								{ text: 'BB', value:'BB' },
+								{ text: 'B', value:'B' },
+								{ text: 'B+', value:'B+' },
+								{ text: 'Baa2', value:'Baa2' },
+								{ text: 'CCC', value:'CCC' },
+								{ text: 'CCC+', value:'CCC+' },
+								{ text: 'Caa1', value:'Caa1' },
+							]" :filter-method="filterPositionInstitutionCredit"></el-table-column>
+							<el-table-column prop="bond_info.bond_credit" label="债项评级" align="center" :filters="[
+								{ text: '0', value: '0' },
+								{ text: 'A-1', value: 'A-1' },
+								{ text: 'AAA', value: 'AAA' },
+								{ text: 'AA', value: 'AA' },
+								{ text: 'AA+', value: 'AA+' },
+								{ text: 'B+', value: 'B+' },
+								{ text: 'BB+', value: 'BB+' },
+								{ text: 'BB', value: 'BB' },
+								{ text: 'A', value: 'A' },
+								{ text: 'A+', value: 'A+' },
+								{ text: 'AA-', value: 'AA-' },
+								{ text: 'A-', value: 'A-' },
+								{ text: 'BBB+', value: 'BBB+' },
+								{ text: 'C', value: 'C' },
+								{ text: 'CC', value: 'CC' },
+								{ text: 'B', value: 'B' },
+								{ text: 'BBB-', value: 'BBB-' },
+								{ text: 'CCC', value: 'CCC' },
+								{ text: 'BBB', value: 'BBB' },
+								{ text: 'B-', value: 'B-' },
+							]" :filter-method="filterPositionBondCredit"></el-table-column>
+							<el-table-column prop="bond_info.bond_type" label="债券类型" align="center" :filters="[
+								{ text: '国债', value: '国债' },
+								{ text: '金融债', value: '金融债' },
+								{ text: '短期融资券', value: '短期融资券' },
+								{ text: '中期票据', value: '中期票据' },
+								{ text: '企债', value: '企债' },
+								{ text: '资产支持证券', value: '资产支持证券' },
+								{ text: '地方政府债', value: '地方政府债' },
+								{ text: '可转债', value: '可转债' },
+								{ text: '公司债', value: '公司债' },
+								{ text: '同业存单', value: '同业存单' },
+								{ text: '央行票据', value: '央行票据' },
+							]" :filter-method="filterPositionType"></el-table-column>
+							<el-table-column prop="bond_info.interest_mode" label="利率类型" align="center" :filters="[
+								{ text: '固定利率', value: '固定利率' },
+								{ text: '零息', value: '零息' },
+								{ text: '贴现', value: '贴现' },
+								{ text: '累进利率', value: '累进利率' },
+								{ text: '浮动利率', value: '浮动利率' },
+							]" :filter-method="filterPositionInterestMode"></el-table-column>
+							<el-table-column prop="bond_info.institution_type" label="发行人性质" align="center" :filters="[
+								{ text: '政策性银行',value:'政策性银行'},
+								{ text: '财政部',value:'财政部'},
+								{ text: '企业',value:'企业'},
+								{ text: '0',value:'0'},
+								{ text: '证券公司',value:'证券公司'},
+								{ text: '其它金融机构',value:'其它金融机构'},
+								{ text: '国际机构',value:'国际机构'},
+								{ text: '股份制商业银行',value:'股份制商业银行'},
+								{ text: '城市商业银行',value:'城市商业银行'},
+								{ text: '国有商业银行',value:'国有商业银行'},
+								{ text: '地方政府',value:'地方政府'},
+								{ text: '中国人民银行',value:'中国人民银行'},
+							]" :filter-method="filterPositionInstitutionType"></el-table-column>
 							<el-table-column prop="status" label="状态" width="100" align="center" :filters="[
 								{ text: '可用', value: '可用' },
 								{ text: '今日到期', value: '今日到期' },
 							]" :filter-method="filterPositionStatus"></el-table-column>
-
-							<el-table-column prop="bond_info.institution_credit" label="主体评级" align="center" :filters="[
-								{ text: 'AA', value: 'AA' },
-								{ text: 'AA+', value: 'AA+' },
-								{ text: 'AAA', value: 'AAA' },
-							]" :filter-method="filterPositionInstitutionCredit"></el-table-column>
-							<el-table-column prop="bond_info.bond_credit" label="债项评级" align="center" :filters="[
-								{ text: 'AA', value: 'AA' },
-								{ text: 'AA+', value: 'AA+' },
-								{ text: 'AAA', value: 'AAA' },
-							]" :filter-method="filterPositionBondCredit"></el-table-column>
-							<el-table-column prop="bond_info.bond_type" label="债券类型" align="center" :filters="[
-								{ text: '国债', value: '国债' },
-								{ text: '地方政府债', value: '地方政府债' },
-								{ text: '政策性金融债', value: '政策性金融债' },
-								{ text: '政府支持债券', value: '政府支持债券' },
-								{ text: '企业债', value: '企业债' },
-							]" :filter-method="filterPositionType"></el-table-column>
-							<el-table-column prop="bond_info.maturity" width="100" label="到期日" align="center">
+							<el-table-column prop="bond_info.remaining_period" width="100" label="剩余期限" align="center" sortable>
 							</el-table-column>
 
 
@@ -251,6 +328,7 @@ interface BondInfoItem {
 	rating_agency: string;
 	have_credit: boolean;
 	same_bonds_in_diff_market: string;
+	issuer_name: string;
 }
 
 interface PositionItem {
@@ -341,6 +419,15 @@ const filterPositionStatus = (value: string, row: any) => {
 };
 const filterZeroPosition = (value: string, row: any) => {
 	return row.value > 0
+};
+const filterPositionMarket = (value: string, row: any) => {
+	return row.bond_info.bond_trading_market === value
+};
+const filterPositionInterestMode = (value: string, row: any) => {
+	return row.bond_info.interest_mode === value
+};
+const filterPositionInstitutionType = (value: string, row: any) => {
+	return row.bond_info.institution_type === value
 };
 
 const allocation: AllocationItem[][] = [];
@@ -455,7 +542,7 @@ let form = reactive({
 const editVisible = ref(false);
 let idx: number = -1;
 let old_value = 0;
-let cur_row = null;
+let cur_row: AllocationItem;
 const handleEditAllocation = (index: number, row: any) => {
 	cur_row = row;
 	idx = index;
@@ -529,7 +616,7 @@ const getAllocationSummaries = (param: SummaryMethodProps) => {
 			return;
 		}
 		if (index === 4) {
-			sums[index] = sumValue;
+			sums[index] = String(sumValue);
 			return;
 		}
 		if (index === 5) {
