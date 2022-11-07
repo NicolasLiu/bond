@@ -11,7 +11,12 @@ import com.lkq.bond.mapper.OrderMapper;
 import com.lkq.bond.mapper.PositionMapper;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -84,12 +89,19 @@ public class OrderController {
 
   @GetMapping("/auto")
   public List<Order> autoCreateOrder() {
-    //查找所有待排券的融资申请，紧急优先
-    List<Apply> todo = applyMapper.getApplyOrderByEmergency("待排券");
+    //查找所有待排券的融资申请,紧急的
+    List<Apply> todo1 = applyMapper.getApplyOrderEmergency("待排券");
+    //根据交易对手的优先级排序
+    todo1.sort((o1, o2) -> o2.opponent.priority - o1.opponent.priority);
+    //查找所有待排券的融资申请,不紧急的
+    List<Apply> todo2 = applyMapper.getApplyOrderNotEmergency("待排券");
+    //根据交易对手的优先级排序
+    todo2.sort((o1, o2) -> o2.opponent.priority - o1.opponent.priority);
+    todo1.addAll(todo2);
     List<Position> all_positions = positionMapper.getAllPosition();
     //依次分配
     List<Order> rtn = new ArrayList<>();
-    for (Apply apply : todo) {
+    for (Apply apply : todo1) {
       rtn.addAll(createOrderForApply(apply, all_positions));
     }
     return rtn;
@@ -99,7 +111,13 @@ public class OrderController {
     List<Order> rtn = new ArrayList<>();
     double sum_value = apply.value;
     double discount_rate = apply.discount_rate;
+    List<String> institution_credit_limit = Arrays.asList(apply.opponent.institution_credit_limit.split(","));
+    List<String> bond_credit_limit = Arrays.asList(apply.opponent.bond_credit_limit.split(","));
     for (Position position : all_positions) {
+      //跳过不符合交易对手的债券评级限制的持仓
+      if (!bond_credit_limit.contains(position.bond_info.bond_credit) || !institution_credit_limit.contains(position.bond_info.institution_credit)) {
+        continue;
+      }
       if (sum_value <= 0) {
         break;
       }

@@ -1,6 +1,7 @@
 package com.lkq.bond.mapper;
 
 import com.lkq.bond.entity.Account;
+import com.lkq.bond.entity.Apply;
 import com.lkq.bond.entity.Order;
 import com.lkq.bond.entity.Position;
 import java.util.List;
@@ -28,4 +29,6 @@ public interface AccountMapper {
   @Options(useGeneratedKeys=true, keyProperty="id")
   public int create(Account account);
 
+  @Select("select * from account")
+  public List<Account> getAllAccount();
 }

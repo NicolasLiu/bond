@@ -41,6 +41,12 @@ const items = [
 		index: '/manage',
 		title: '排券',
 		permiss: '3'
+	},
+	{
+		icon: 'User',
+		index: '/opponent',
+		title: '交易对手',
+		permiss: '4'
 	}
 
 

@@ -27,7 +27,7 @@
 					<el-table-column prop="discount_rate" label="折价率" align="center"></el-table-column>
 					<el-table-column prop="financing_type" label="融资类型" align="center"></el-table-column>
 					<el-table-column prop="financing_rate" label="融资利率" align="center" sortable></el-table-column>
-					<el-table-column prop="opponent" label="交易对手" align="center"></el-table-column>
+					<el-table-column prop="opponent.name" label="交易对手" align="center"></el-table-column>
 					<el-table-column prop="trader" label="对方交易员" align="center"></el-table-column>
 					<el-table-column prop="clearing_speed" label="清算速度" align="center"></el-table-column>
 					<el-table-column prop="initial_settlement_method" label="首期结算方式" align="center"></el-table-column>
@@ -78,50 +78,53 @@
 							<el-table-column prop="bond_info.bond_code" label="债券代码" align="center"></el-table-column>
 							<el-table-column prop="bond_info.short_name" label="债券名称" width="150" align="center">
 							</el-table-column>
-							<el-table-column prop="account.name" label="账户名称" width="100" align="center" sortable :sort-by="['account.name','value']">
+							<el-table-column prop="account.name" label="账户名称" width="100" align="center" sortable
+								:sort-by="['account.name', 'value']">
 							</el-table-column>
-							<el-table-column prop="value" label="可用金额（万元）" width="100" align="center" sortable :filter-method="filterZeroPosition" :filters="[
-								{ text: '非0', value: '非0' }
-							]" :filtered-value="['非0']">
+							<el-table-column prop="value" label="可用金额（万元）" width="100" align="center" sortable
+								:filter-method="filterZeroPosition" :filters="[
+									{ text: '非0', value: '非0' }
+								]" :filtered-value="['非0']">
 							</el-table-column>
-							
-							<el-table-column prop="bond_info.bond_trading_market" label="场所" width="100" align="center" :filters="[
-								{ text: 'IB', value: 'IB' },
-								{ text: 'SH', value: 'SH' },
-								{ text: 'SZ', value: 'SZ' },
-							]" :filter-method="filterPositionMarket"></el-table-column>
+
+							<el-table-column prop="bond_info.bond_trading_market" label="场所" width="100" align="center"
+								:filters="[
+									{ text: 'IB', value: 'IB' },
+									{ text: 'SH', value: 'SH' },
+									{ text: 'SZ', value: 'SZ' },
+								]" :filter-method="filterPositionMarket"></el-table-column>
 
 							<el-table-column prop="bond_info.institution_credit" label="主体评级" align="center" :filters="[
-								{ text: 'A+', value:'A+' },
-								{ text: '0', value:'0' },
-								{ text: 'AAA', value:'AAA' },
-								{ text: 'AA+', value:'AA+' },
-								{ text: 'AA', value:'AA' },
-								{ text: 'BBB', value:'BBB' },
-								{ text: 'Baa1', value:'Baa1' },
-								{ text: 'AA+pi', value:'AA+pi' },
-								{ text: 'BB+', value:'BB+' },
-								{ text: 'Baa3', value:'Baa3' },
-								{ text: 'AAApi', value:'AAApi' },
-								{ text: 'BBB-', value:'BBB-' },
-								{ text: 'BBB+', value:'BBB+' },
-								{ text: 'A1', value:'A1' },
-								{ text: 'Ba2', value:'Ba2' },
-								{ text: 'Ba1', value:'Ba1' },
-								{ text: 'AApi', value:'AApi' },
-								{ text: 'A3', value:'A3' },
-								{ text: 'A-', value:'A-' },
-								{ text: 'AA-', value:'AA-' },
-								{ text: 'A', value:'A' },
-								{ text: 'B-', value:'B-' },
-								{ text: 'C', value:'C' },
-								{ text: 'BB', value:'BB' },
-								{ text: 'B', value:'B' },
-								{ text: 'B+', value:'B+' },
-								{ text: 'Baa2', value:'Baa2' },
-								{ text: 'CCC', value:'CCC' },
-								{ text: 'CCC+', value:'CCC+' },
-								{ text: 'Caa1', value:'Caa1' },
+								{ text: 'A+', value: 'A+' },
+								{ text: '0', value: '0' },
+								{ text: 'AAA', value: 'AAA' },
+								{ text: 'AA+', value: 'AA+' },
+								{ text: 'AA', value: 'AA' },
+								{ text: 'BBB', value: 'BBB' },
+								{ text: 'Baa1', value: 'Baa1' },
+								{ text: 'AA+pi', value: 'AA+pi' },
+								{ text: 'BB+', value: 'BB+' },
+								{ text: 'Baa3', value: 'Baa3' },
+								{ text: 'AAApi', value: 'AAApi' },
+								{ text: 'BBB-', value: 'BBB-' },
+								{ text: 'BBB+', value: 'BBB+' },
+								{ text: 'A1', value: 'A1' },
+								{ text: 'Ba2', value: 'Ba2' },
+								{ text: 'Ba1', value: 'Ba1' },
+								{ text: 'AApi', value: 'AApi' },
+								{ text: 'A3', value: 'A3' },
+								{ text: 'A-', value: 'A-' },
+								{ text: 'AA-', value: 'AA-' },
+								{ text: 'A', value: 'A' },
+								{ text: 'B-', value: 'B-' },
+								{ text: 'C', value: 'C' },
+								{ text: 'BB', value: 'BB' },
+								{ text: 'B', value: 'B' },
+								{ text: 'B+', value: 'B+' },
+								{ text: 'Baa2', value: 'Baa2' },
+								{ text: 'CCC', value: 'CCC' },
+								{ text: 'CCC+', value: 'CCC+' },
+								{ text: 'Caa1', value: 'Caa1' },
 							]" :filter-method="filterPositionInstitutionCredit"></el-table-column>
 							<el-table-column prop="bond_info.bond_credit" label="债项评级" align="center" :filters="[
 								{ text: '0', value: '0' },
@@ -166,24 +169,25 @@
 								{ text: '浮动利率', value: '浮动利率' },
 							]" :filter-method="filterPositionInterestMode"></el-table-column>
 							<el-table-column prop="bond_info.institution_type" label="发行人性质" align="center" :filters="[
-								{ text: '政策性银行',value:'政策性银行'},
-								{ text: '财政部',value:'财政部'},
-								{ text: '企业',value:'企业'},
-								{ text: '0',value:'0'},
-								{ text: '证券公司',value:'证券公司'},
-								{ text: '其它金融机构',value:'其它金融机构'},
-								{ text: '国际机构',value:'国际机构'},
-								{ text: '股份制商业银行',value:'股份制商业银行'},
-								{ text: '城市商业银行',value:'城市商业银行'},
-								{ text: '国有商业银行',value:'国有商业银行'},
-								{ text: '地方政府',value:'地方政府'},
-								{ text: '中国人民银行',value:'中国人民银行'},
+								{ text: '政策性银行', value: '政策性银行' },
+								{ text: '财政部', value: '财政部' },
+								{ text: '企业', value: '企业' },
+								{ text: '0', value: '0' },
+								{ text: '证券公司', value: '证券公司' },
+								{ text: '其它金融机构', value: '其它金融机构' },
+								{ text: '国际机构', value: '国际机构' },
+								{ text: '股份制商业银行', value: '股份制商业银行' },
+								{ text: '城市商业银行', value: '城市商业银行' },
+								{ text: '国有商业银行', value: '国有商业银行' },
+								{ text: '地方政府', value: '地方政府' },
+								{ text: '中国人民银行', value: '中国人民银行' },
 							]" :filter-method="filterPositionInstitutionType"></el-table-column>
 							<el-table-column prop="status" label="状态" width="100" align="center" :filters="[
 								{ text: '可用', value: '可用' },
 								{ text: '今日到期', value: '今日到期' },
 							]" :filter-method="filterPositionStatus"></el-table-column>
-							<el-table-column prop="bond_info.remaining_period" width="100" label="剩余期限" align="center" sortable>
+							<el-table-column prop="bond_info.remaining_period" width="100" label="剩余期限" align="center"
+								sortable>
 							</el-table-column>
 
 
@@ -207,8 +211,10 @@
 							<el-table-column prop="position.code" label="债券代码" align="center"></el-table-column>
 							<el-table-column prop="position.name" label="债券名称" align="center"></el-table-column>
 							<el-table-column prop="value" label="分配金额（万元）" align="center" width="100"></el-table-column>
-							<el-table-column prop="discount_rate" label="折价率" align="center" width="60"></el-table-column>
-							<el-table-column prop="discount_value" label="折价金额（万元）" align="center" width="100"></el-table-column>
+							<el-table-column prop="discount_rate" label="折价率" align="center" width="60">
+							</el-table-column>
+							<el-table-column prop="discount_value" label="折价金额（万元）" align="center" width="100">
+							</el-table-column>
 
 
 							<el-table-column label="操作" width="220" align="center" fixed="right">
@@ -257,7 +263,7 @@
 <script setup lang="ts" name="basetable">
 import { ref, reactive } from 'vue';
 import { ElMessage, ElMessageBox, UploadUserFile } from 'element-plus';
-import type { UploadInstance } from 'element-plus'
+import type { UploadInstance, TableInstance } from 'element-plus'
 import { Delete, Edit, Search, Plus } from '@element-plus/icons-vue';
 import { getAllApply, getPosition, createOrder, cancelOrder, getOrder, autoCreateOrder } from '../api/index';
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults';
@@ -277,10 +283,10 @@ interface ApplyItem {
 	id: number;
 	account: Account;
 	status: string;
-	opponent: string;
+	opponent: OpponentItem;
 	temporary_opponent: string;
 	trader: string;
-	discount_rate:number;
+	discount_rate: number;
 	financing_type: string;
 	financing_rate: number;
 	clearing_speed: string;
@@ -356,6 +362,15 @@ interface AllocationItem {
 	discount_value: number;
 }
 
+interface OpponentItem {
+	id: number;
+	name: string;
+	priority: number;
+	bond_credit_limit: string;
+	institution_credit_limit: string;
+
+}
+
 interface SummaryMethodProps<T = AllocationItem> {
 	columns: TableColumnCtx<T>[]
 	data: T[]
@@ -366,6 +381,7 @@ const positionData = ref<PositionItem[]>([]);
 const positionZeroData = ref<PositionItem[]>([]);
 const allocationData = ref<AllocationItem[]>([]);
 const uploadRef = ref<UploadInstance>();
+const applyTable = ref<TableInstance>();
 
 
 const submitUpload = () => {
@@ -444,6 +460,7 @@ const handleApplySelect = (val: ApplyItem) => {
 			allocation[selectedApply.value.id] = []
 		}
 		allocationData.value = allocation[selectedApply.value.id];
+		console.log(allocationData.value);
 	}
 	if (selectedApply.value.status == '已排券') {
 		getOrder(selectedApply.value.id).then(res => {
@@ -458,7 +475,7 @@ const handleApplySelect = (val: ApplyItem) => {
 					}
 
 				}
-				allocationData.value.push({ id: orders[i].id, apply: val, position: tmp_position, value: orders[i].value, discount_rate:orders[i].discount_rate, discount_value:orders[i].discount_value });
+				allocationData.value.push({ id: orders[i].id, apply: val, position: tmp_position, value: orders[i].value, discount_rate: orders[i].discount_rate, discount_value: orders[i].discount_value });
 			}
 			allocation[val.id] = allocationData.value;
 		});
@@ -497,8 +514,9 @@ const autoManage = () => {
 				return;
 			}
 			tmp_position.value = tmp_position.value - orders[i].value;
-			allocation[tmp_apply.id].push({ id: orders[i].id, apply: tmp_apply, position: tmp_position, value: orders[i].value, discount_rate:orders[i].discount_rate, discount_value:orders[i].discount_value });
+			allocation[tmp_apply.id].push({ id: orders[i].id, apply: tmp_apply, position: tmp_position, value: orders[i].value, discount_rate: orders[i].discount_rate, discount_value: orders[i].discount_value });
 		}
+		applyTable.value!.setCurrentRow();
 		ElMessage.success('自动排券完成');
 	});
 
@@ -531,8 +549,8 @@ const handleUse = (index: number, row: any) => {
 	var alloc_v = Math.min(p_max, last);
 	row.value = row.value - alloc_v;
 	var discount_v = alloc_v * selectedApply.value.discount_rate;
-	allocationData.value.push({ id: 0, position: row, apply: selectedApply.value, value: alloc_v, discount_rate:selectedApply.value.discount_rate, discount_value:discount_v});
-	
+	allocationData.value.push({ id: 0, position: row, apply: selectedApply.value, value: alloc_v, discount_rate: selectedApply.value.discount_rate, discount_value: discount_v });
+
 };
 
 let form = reactive({
@@ -623,7 +641,7 @@ const getAllocationSummaries = (param: SummaryMethodProps) => {
 			if (selectedApply.value == undefined) {
 				return;
 			}
-			sums[index] =  " 目标金额： " + selectedApply.value.value;
+			sums[index] = " 目标金额： " + selectedApply.value.value;
 			return;
 		}
 	})

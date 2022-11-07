@@ -1,6 +1,10 @@
 import axios, {AxiosInstance, AxiosError, AxiosResponse, AxiosRequestConfig} from 'axios';
+const {
+    VITE_API_URL
+} = process.env
 
 const service:AxiosInstance = axios.create({
+    baseURL: VITE_API_URL,
     timeout: 5000
 });
 

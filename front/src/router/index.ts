@@ -19,7 +19,8 @@ const routes:RouteRecordRaw[] = [
                     permiss: '1'
                 },
                 component: () => import ( /* webpackChunkName: "dashboard" */ "../views/dashboard.vue")
-            }, {
+            }, 
+            {
                 path: "/apply",
                 name: "apply",
                 meta: {
@@ -27,7 +28,8 @@ const routes:RouteRecordRaw[] = [
                     permiss: '2'
                 },
                 component: () => import ( /* webpackChunkName: "table" */ "../views/apply.vue")
-            }, {
+            }, 
+            {
                 path: "/manage",
                 name: "manage",
                 meta: {
@@ -35,7 +37,17 @@ const routes:RouteRecordRaw[] = [
                     permiss: '3'
                 },
                 component: () => import ( /* webpackChunkName: "charts" */ "../views/manage.vue")
-            },   {
+            },  
+            {
+                path: "/opponent",
+                name: "opponent",
+                meta: {
+                    title: '交易对手',
+                    permiss: '4'
+                },
+                component: () => import ( /* webpackChunkName: "charts" */ "../views/opponent.vue")
+            },  
+            {
                 path: '/user',
                 name: 'user',
                 meta: {

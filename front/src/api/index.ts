@@ -2,14 +2,14 @@ import request from '../utils/request';
 
 export const getAllApply = () => {
     return request({
-        url: 'http://127.0.0.1:8080/apply/all',
+        url: '/apply/all',
         method: 'get'
     });
 };
 
 export const updateApply = (form: object) => {
     return request({
-        url: 'http://127.0.0.1:8080/apply/update',
+        url: '/apply/update',
         method: 'post',
         data:form
     });
@@ -17,7 +17,7 @@ export const updateApply = (form: object) => {
 
 export const deleteApply = (aid: number) => {
     return request({
-        url: 'http://127.0.0.1:8080/apply/delete',
+        url: '/apply/delete',
         method: 'post',
         params: {
             id:aid
@@ -27,7 +27,7 @@ export const deleteApply = (aid: number) => {
 
 export const addApply = (form: object) => {
     return request({
-        url: 'http://127.0.0.1:8080/apply/add',
+        url: '/apply/add',
         method: 'post',
         data:form
     });
@@ -35,14 +35,14 @@ export const addApply = (form: object) => {
 
 export const getPosition = () => {
     return request({
-        url: 'http://127.0.0.1:8080/position/all',
+        url: '/position/all',
         method: 'get'
     });
 };
 
 export const createOrder = (form: object) => {
     return request({
-        url: 'http://127.0.0.1:8080/order/create',
+        url: '/order/create',
         method: 'post',
         data:form
     });
@@ -50,7 +50,7 @@ export const createOrder = (form: object) => {
 
 export const cancelOrder = (form: object) => {
     return request({
-        url: 'http://127.0.0.1:8080/order/cancel',
+        url: '/order/cancel',
         method: 'post',
         data:form
     });
@@ -58,7 +58,7 @@ export const cancelOrder = (form: object) => {
 
 export const getOrder = (apply: number) => {
     return request({
-        url: 'http://127.0.0.1:8080/order/get',
+        url: '/order/get',
         method: 'get',
         params: {
             apply:apply
@@ -68,7 +68,48 @@ export const getOrder = (apply: number) => {
 
 export const autoCreateOrder = () => {
     return request({
-        url: 'http://127.0.0.1:8080/order/auto',
+        url: '/order/auto',
         method: 'get'
     });
 };
+
+export const getAllOpponent = () => {
+    return request({
+        url: '/opponent/all',
+        method: 'get'
+    });
+};
+
+export const addOpponent = (form: object) => {
+    return request({
+        url: '/opponent/add',
+        method: 'post',
+        data: form
+    });
+};
+
+export const deleteOpponent = (aid: number) => {
+    return request({
+        url: '/opponent/delete',
+        method: 'post',
+        params: {
+            id:aid
+        }
+    });
+};
+
+export const updateOpponent = (form: object) => {
+    return request({
+        url: '/apply/update',
+        method: 'post',
+        data:form
+    });
+};
+
+export const getAllAccount = () => {
+    return request({
+        url: '/account/all',
+        method: 'get'
+    });
+};
+

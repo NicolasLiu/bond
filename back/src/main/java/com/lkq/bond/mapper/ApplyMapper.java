@@ -17,7 +17,8 @@ import org.apache.ibatis.annotations.Update;
 public interface ApplyMapper {
   @Select("select * from apply")
   @Results({
-      @Result(property = "account", column = "account", one = @One(select = "com.lkq.bond.mapper.AccountMapper.getAccountById"))
+      @Result(property = "account", column = "account", one = @One(select = "com.lkq.bond.mapper.AccountMapper.getAccountById")),
+      @Result(property = "opponent", column = "opponent", one = @One(select = "com.lkq.bond.mapper.OpponentMapper.getOpponentById"))
   })
   public List<Apply> getAllApply();
 
@@ -25,12 +26,13 @@ public interface ApplyMapper {
 
   @Select("select * from apply where id=#{id}")
   @Results({
-      @Result(property = "account", column = "account", one = @One(select = "com.lkq.bond.mapper.AccountMapper.getAccountById"))
+      @Result(property = "account", column = "account", one = @One(select = "com.lkq.bond.mapper.AccountMapper.getAccountById")),
+      @Result(property = "opponent", column = "opponent", one = @One(select = "com.lkq.bond.mapper.OpponentMapper.getOpponentById"))
   })
   public Apply getApplyById(int id);
 
   @Update("update apply set status=#{status},account=#{account.id}," +
-      "opponent=#{opponent},temporary_opponent=#{temporary_opponent}," +
+      "opponent=#{opponent.id},temporary_opponent=#{temporary_opponent}," +
       "trader=#{trader},discount_rate=#{discount_rate},financing_type=#{financing_type}," +
       "financing_rate=#{financing_rate},clearing_speed=#{clearing_speed}," +
       "initial_settlement_method=#{initial_settlement_method}," +
@@ -45,15 +47,23 @@ public interface ApplyMapper {
    @Insert("insert into apply(status,account,opponent,temporary_opponent,trader,discount_rate,financing_type," +
        "financing_rate,clearing_speed,initial_settlement_method,expiry_settlement_method,value," +
        "duration,recording_day,trading_day,maturity_day,aim,mark,emergency) values(#{status}, " +
-       "#{account.id},#{opponent},#{temporary_opponent},#{trader},#{discount_rate},#{financing_type},#{financing_rate}," +
+       "#{account.id},#{opponent.id},#{temporary_opponent},#{trader},#{discount_rate},#{financing_type},#{financing_rate}," +
        "#{clearing_speed},#{initial_settlement_method},#{expiry_settlement_method},#{value},#{duration}," +
        "#{recording_day, jdbcType=DATE},#{trading_day, jdbcType=DATE},#{maturity_day, jdbcType=DATE}," +
        "#{aim},#{mark},#{emergency})")
    public int addApply(Apply apply);
 
-  @Select("select * from apply where status=#{status} order by emergency DESC")
+  @Select("select * from apply where status=#{status} and emergency=1")
   @Results({
-      @Result(property = "account", column = "account", one = @One(select = "com.lkq.bond.mapper.AccountMapper.getAccountById"))
+      @Result(property = "account", column = "account", one = @One(select = "com.lkq.bond.mapper.AccountMapper.getAccountById")),
+      @Result(property = "opponent", column = "opponent", one = @One(select = "com.lkq.bond.mapper.OpponentMapper.getOpponentById"))
   })
-  public List<Apply> getApplyOrderByEmergency(String status);
+  public List<Apply> getApplyOrderEmergency(String status);
+
+  @Select("select * from apply where status=#{status} and emergency=0")
+  @Results({
+      @Result(property = "account", column = "account", one = @One(select = "com.lkq.bond.mapper.AccountMapper.getAccountById")),
+      @Result(property = "opponent", column = "opponent", one = @One(select = "com.lkq.bond.mapper.OpponentMapper.getOpponentById"))
+  })
+  public List<Apply> getApplyOrderNotEmergency(String status);
 }

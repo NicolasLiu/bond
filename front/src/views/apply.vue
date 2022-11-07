@@ -11,7 +11,7 @@
 				<el-table-column prop="discount_rate" label="折价率" align="center"></el-table-column>
 				<el-table-column prop="financing_type" label="融资类型" align="center"></el-table-column>
 				<el-table-column prop="financing_rate" label="融资利率" align="center"></el-table-column>
-				<el-table-column prop="opponent" label="交易对手" align="center"></el-table-column>
+				<el-table-column prop="opponent.name" label="交易对手" align="center"></el-table-column>
 				<el-table-column prop="trader" label="对方交易员" align="center"></el-table-column>
 				<el-table-column prop="clearing_speed" label="清算速度" align="center"></el-table-column>
 				<el-table-column prop="initial_settlement_method" label="首期结算方式" align="center"></el-table-column>
@@ -53,13 +53,15 @@
 					<el-col :span="8">
 						<el-form-item label="融资/借贷账户" label-width="110px" prop="account">
 							<el-select v-model="form.account" placeholder="请选择">
-								<el-option key="1" label="lcd_排券_银行间" :value="1"></el-option>
+								<el-option v-for="o in accountList" :key="o.id" :label="o.name" :value="o.id"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="交易对手" label-width="100px" prop="opponent">
-							<el-input v-model="form.opponent"></el-input>
+							<el-select v-model="form.opponent" placeholder="请选择">
+								<el-option v-for="o in opponentList" :key="o.id" :label="o.name" :value="o.id"></el-option>
+							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
@@ -173,13 +175,15 @@
 					<el-col :span="8">
 						<el-form-item label="融资/借贷账户" label-width="110px" prop="account">
 							<el-select v-model="form.account" placeholder="请选择">
-								<el-option key="1" label="lcd_排券_银行间" :value="1"></el-option>
+								<el-option v-for="o in accountList" :key="o.id" :label="o.name" :value="o.id"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="交易对手" label-width="100px" prop="opponent">
-							<el-input v-model="form.opponent"></el-input>
+							<el-select v-model="form.opponent" placeholder="请选择">
+								<el-option v-for="o in opponentList" :key="o.id" :label="o.name" :value="o.id"></el-option>
+							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
@@ -292,7 +296,7 @@
 import { ref, reactive } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Delete, Edit, Search, Plus } from '@element-plus/icons-vue';
-import { getAllApply, updateApply, deleteApply, addApply } from '../api/index';
+import { getAllApply, updateApply, deleteApply, addApply, getAllOpponent, getAllAccount } from '../api/index';
 
 
 interface Account {
@@ -308,7 +312,7 @@ interface TableItem {
 	id: number;
 	account: Account;
 	status: string;
-	opponent: string;
+	opponent: OpponentItem;
 	temporary_opponent: string;
 	trader: string;
 	discount_rate: number;
@@ -327,6 +331,15 @@ interface TableItem {
 	emergency: number;
 }
 
+interface OpponentItem {
+	id: number;
+	name: string;
+	priority: number;
+	bond_credit_limit: string;
+	institution_credit_limit: string;
+
+}
+
 const query = reactive({
 	address: '',
 	name: '',
@@ -334,12 +347,20 @@ const query = reactive({
 	pageSize: 10
 });
 const tableData = ref<TableItem[]>([]);
+const opponentList = ref<OpponentItem[]>([]);
+const accountList = ref<Account[]>([]);
 const pageTotal = ref(0);
 // 获取表格数据
 const getData = () => {
 	getAllApply().then(res => {
 		tableData.value = res.data;
 		pageTotal.value = res.data.pageTotal || 50;
+	});
+	getAllOpponent().then(res => {
+		opponentList.value = res.data;
+	});
+	getAllAccount().then(res => {
+		accountList.value = res.data;
 	});
 };
 getData();
@@ -380,7 +401,7 @@ let form = reactive({
 	id: 0,
 	account: 0,
 	status: '',
-	opponent: '',
+	opponent: 1,
 	date: [new Date(), new Date()],
 	temporary_opponent: '',
 	trader: '',
@@ -403,7 +424,7 @@ const handleAdd = () => {
 	form.id = 0;
 	form.account = 1;
 	form.status = '待排券';
-	form.opponent = '';
+	form.opponent = 1;
 	form.trader = '';
 	form.temporary_opponent = '';
 	form.discount_rate = 1;
@@ -428,7 +449,7 @@ const handleEdit = (index: number, row: any) => {
 	form.id = row.id;
 	form.account = row.account.id;
 	form.status = row.status;
-	form.opponent = row.opponent;
+	form.opponent = row.opponent.id;
 	form.trader = row.trader;
 	form.temporary_opponent = row.temporary_opponent;
 	form.discount_rate = row.discount_rate;
@@ -456,7 +477,11 @@ const saveEdit = () => {
 		}
 	});
 	tableData.value[idx].status = form.status;
-	tableData.value[idx].opponent = form.opponent;
+	for (var o in opponentList.value) {
+		if (opponentList.value[o].id == form.opponent) {
+			tableData.value[idx].opponent = opponentList.value[o];
+		}
+	}
 	tableData.value[idx].trader = form.trader;
 	tableData.value[idx].temporary_opponent = form.temporary_opponent;
 	tableData.value[idx].discount_rate = form.discount_rate;

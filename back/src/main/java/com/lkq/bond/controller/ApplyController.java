@@ -5,6 +5,7 @@ import com.lkq.bond.entity.Account;
 import com.lkq.bond.entity.Apply;
 import com.lkq.bond.mapper.AccountMapper;
 import com.lkq.bond.mapper.ApplyMapper;
+import com.lkq.bond.mapper.OpponentMapper;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,6 +23,8 @@ public class ApplyController {
   private ApplyMapper applyMapper;
   @Autowired
   private AccountMapper accountMapper;
+  @Autowired
+  private OpponentMapper opponentMapper;
 
   @GetMapping("/all")
   public List<Apply> getAllApply() {
@@ -36,7 +39,7 @@ public class ApplyController {
     apply.id = object.get("id").getAsInt();
     apply.status = object.get("status").getAsString();
     apply.account = accountMapper.getAccountById(object.get("account").getAsInt());
-    apply.opponent = object.get("opponent").getAsString();
+    apply.opponent = opponentMapper.getOpponentById(object.get("opponent").getAsInt());
     apply.temporary_opponent = object.get("temporary_opponent").getAsString();
     apply.trader = object.get("trader").getAsString();
     apply.discount_rate = object.get("discount_rate").getAsDouble();
@@ -71,7 +74,7 @@ public class ApplyController {
     Apply apply = new Apply();
     apply.status = object.get("status").getAsString();
     apply.account = accountMapper.getAccountById(object.get("account").getAsInt());
-    apply.opponent = object.get("opponent").getAsString();
+    apply.opponent = opponentMapper.getOpponentById(object.get("opponent").getAsInt());
     apply.temporary_opponent = object.get("temporary_opponent").getAsString();
     apply.trader = object.get("trader").getAsString();
     apply.discount_rate = object.get("discount_rate").getAsDouble();

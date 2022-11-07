@@ -6,7 +6,7 @@ public class Apply {
   public int id;
   public String status;
   public Account account;
-  public String opponent;
+  public Opponent opponent;
   public String temporary_opponent;
   public String trader;
   public double discount_rate;

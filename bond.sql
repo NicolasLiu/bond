@@ -16,6 +16,24 @@ Date: 2022-10-21 11:02:14
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
+-- Table structure for opponent
+-- ----------------------------
+DROP TABLE IF EXISTS `opponent`;
+CREATE TABLE `opponent` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `priority` int DEFAULT NULL,
+  `bond_credit_limit` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `institution_credit_limit` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Records of opponent
+-- ----------------------------
+INSERT INTO `opponent` VALUES ('1', '默认对手', '1', '0,C,CC,CCC,B-,B,B+,BB-,BB,BB+,BBB-,BBB,BBB+,A-1,A-,A,A+,AA-,AA,AA+,AAA', '0,C,CC,CCC,CCC+,B-,B,B+,BB-,BB,BB+,BBB-,BBB,BBB+,A-1,A-,A,A+,AA-,AA,AA+,AAA,A1,AApi,AA+pi,A3,AAApi,Ba1,Ba2,Baa1,Baa2,Baa3,Caa1');
+
+-- ----------------------------
 -- Table structure for account
 -- ----------------------------
 DROP TABLE IF EXISTS `account`;
@@ -32,7 +50,7 @@ CREATE TABLE `account` (
 -- ----------------------------
 -- Records of account
 -- ----------------------------
-INSERT INTO `account` VALUES ('1', '默认用户', 'lcd_排券_银行间', 'lcd_pq_yhj', 'lcd_中债登_排券', 'lcd_wzq_pq1');
+INSERT INTO `account` VALUES ('1', '默认用户', '', '', '', '');
 
 -- ----------------------------
 -- Table structure for apply
@@ -42,7 +60,7 @@ CREATE TABLE `apply` (
   `id` int NOT NULL AUTO_INCREMENT,
   `status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `account` int DEFAULT NULL,
-  `opponent` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `opponent` int DEFAULT NULL,
   `temporary_opponent` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `trader` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `discount_rate` double DEFAULT NULL,
