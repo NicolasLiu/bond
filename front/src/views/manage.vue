@@ -73,14 +73,16 @@
 								</el-upload>
 							</div>
 						</template>
-						<el-table :data="positionData" border class="table" ref="positionTable"
+						<el-table :data="positionData" border class="table" ref="positionTable" scrollbar-always-on
 							header-cell-class-name="table-header" :max-height="400">
 							<el-table-column prop="bond_info.bond_code" label="债券代码" align="center"></el-table-column>
 							<el-table-column prop="bond_info.short_name" label="债券名称" width="150" align="center">
 							</el-table-column>
 							<el-table-column prop="account.name" label="账户名称" width="100" align="center" sortable :sort-by="['account.name','value']">
 							</el-table-column>
-							<el-table-column prop="value" label="可用金额（万元）" width="100" align="center" sortable>
+							<el-table-column prop="value" label="可用金额（万元）" width="100" align="center" sortable :filter-method="filterZeroPosition" :filters="[
+								{ text: '非0', value: '非0' }
+							]" :filtered-value="['非0']">
 							</el-table-column>
 							<el-table-column prop="status" label="状态" width="100" align="center" :filters="[
 								{ text: '可用', value: '可用' },
@@ -283,6 +285,7 @@ interface SummaryMethodProps<T = AllocationItem> {
 
 const applyData = ref<ApplyItem[]>([]);
 const positionData = ref<PositionItem[]>([]);
+const positionZeroData = ref<PositionItem[]>([]);
 const allocationData = ref<AllocationItem[]>([]);
 const uploadRef = ref<UploadInstance>();
 
@@ -335,6 +338,9 @@ const filterPositionType = (value: string, row: any) => {
 };
 const filterPositionStatus = (value: string, row: any) => {
 	return row.status === value
+};
+const filterZeroPosition = (value: string, row: any) => {
+	return row.value > 0
 };
 
 const allocation: AllocationItem[][] = [];
@@ -439,7 +445,7 @@ const handleUse = (index: number, row: any) => {
 	row.value = row.value - alloc_v;
 	var discount_v = alloc_v * selectedApply.value.discount_rate;
 	allocationData.value.push({ id: 0, position: row, apply: selectedApply.value, value: alloc_v, discount_rate:selectedApply.value.discount_rate, discount_value:discount_v});
-	console.log(allocationData.value);
+	
 };
 
 let form = reactive({
