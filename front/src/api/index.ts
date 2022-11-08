@@ -100,7 +100,7 @@ export const deleteOpponent = (aid: number) => {
 
 export const updateOpponent = (form: object) => {
     return request({
-        url: '/apply/update',
+        url: '/opponent/update',
         method: 'post',
         data:form
     });
@@ -109,6 +109,13 @@ export const updateOpponent = (form: object) => {
 export const getAllAccount = () => {
     return request({
         url: '/account/all',
+        method: 'get'
+    });
+};
+
+export const getAllIssuer = () => {
+    return request({
+        url: '/issuer/all',
         method: 'get'
     });
 };

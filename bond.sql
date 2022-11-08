@@ -25,13 +25,15 @@ CREATE TABLE `opponent` (
   `priority` int DEFAULT NULL,
   `bond_credit_limit` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `institution_credit_limit` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `issuer_prefer` longtext COLLATE utf8mb4_unicode_ci,
+  `issuer_exclude` longtext COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of opponent
 -- ----------------------------
-INSERT INTO `opponent` VALUES ('1', '默认对手', '1', '0,C,CC,CCC,B-,B,B+,BB-,BB,BB+,BBB-,BBB,BBB+,A-1,A-,A,A+,AA-,AA,AA+,AAA', '0,C,CC,CCC,CCC+,B-,B,B+,BB-,BB,BB+,BBB-,BBB,BBB+,A-1,A-,A,A+,AA-,AA,AA+,AAA,A1,AApi,AA+pi,A3,AAApi,Ba1,Ba2,Baa1,Baa2,Baa3,Caa1');
+INSERT INTO `opponent` VALUES ('1', '默认对手', '1', '0,C,CC,CCC,B-,B,B+,BB-,BB,BB+,BBB-,BBB,BBB+,A-1,A-,A,A+,AA-,AA,AA+,AAA', '0,C,CC,CCC,CCC+,B-,B,B+,BB-,BB,BB+,BBB-,BBB,BBB+,A-1,A-,A,A+,AA-,AA,AA+,AAA,A1,AApi,AA+pi,A3,AAApi,Ba1,Ba2,Baa1,Baa2,Baa3,Caa1',NULL,NULL);
 
 -- ----------------------------
 -- Table structure for account
@@ -170,3 +172,12 @@ CREATE TABLE `position` (
 -- ----------------------------
 -- Records of position
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for issuer
+-- ----------------------------
+DROP TABLE IF EXISTS `issuer`;
+CREATE TABLE `issuer` (
+  `issuer_name` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  UNIQUE KEY `uniq` (`issuer_name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -6,4 +6,6 @@ public class Opponent {
   public int priority;
   public String bond_credit_limit;
   public String institution_credit_limit;
+  public String issuer_prefer;
+  public String issuer_exclude;
 }

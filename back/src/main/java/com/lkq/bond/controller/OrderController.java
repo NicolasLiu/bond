@@ -111,11 +111,46 @@ public class OrderController {
     List<Order> rtn = new ArrayList<>();
     double sum_value = apply.value;
     double discount_rate = apply.discount_rate;
-    List<String> institution_credit_limit = Arrays.asList(apply.opponent.institution_credit_limit.split(","));
-    List<String> bond_credit_limit = Arrays.asList(apply.opponent.bond_credit_limit.split(","));
+    List<String> institution_credit_limit = apply.opponent.institution_credit_limit == null ? new ArrayList<>() : Arrays.asList(apply.opponent.institution_credit_limit.split(","));
+    List<String> bond_credit_limit = apply.opponent.bond_credit_limit == null ? new ArrayList<>() : Arrays.asList(apply.opponent.bond_credit_limit.split(","));
+    List<String> issuer_exclude = apply.opponent.issuer_exclude == null ? new ArrayList<>() : Arrays.asList(apply.opponent.issuer_exclude.split(","));
+    List<String> issuer_prefer = apply.opponent.issuer_prefer == null ? new ArrayList<>() : Arrays.asList(apply.opponent.issuer_prefer.split(","));
     for (Position position : all_positions) {
       //跳过不符合交易对手的债券评级限制的持仓
       if (!bond_credit_limit.contains(position.bond_info.bond_credit) || !institution_credit_limit.contains(position.bond_info.institution_credit)) {
+        continue;
+      }
+      //先试图用交易对手的债券偏好进行排券
+      if (!issuer_prefer.contains(position.bond_info.issuer_name)) {
+        continue;
+      }
+      if (sum_value <= 0) {
+        break;
+      }
+      if (position.value <= 0) {
+        continue;
+      }
+      Order o = new Order();
+      o.apply = apply.id;
+      o.position = position.id;
+      o.discount_rate = discount_rate;
+      if (position.value*discount_rate >= sum_value) {
+        o.value = new BigDecimal(sum_value / discount_rate).setScale(0, BigDecimal.ROUND_UP).doubleValue();
+      } else {
+        o.value = position.value;
+      }
+      o.discount_value = new BigDecimal(o.value * discount_rate).setScale(0, BigDecimal.ROUND_DOWN).doubleValue();
+      position.value = position.value - o.value;
+      sum_value = sum_value - o.discount_value;
+      rtn.add(o);
+    }
+    for (Position position : all_positions) {
+      //跳过不符合交易对手的债券评级限制的持仓
+      if (!bond_credit_limit.contains(position.bond_info.bond_credit) || !institution_credit_limit.contains(position.bond_info.institution_credit)) {
+        continue;
+      }
+      //跳过交易对手的债券黑名单
+      if (issuer_exclude.contains(position.bond_info.issuer_name)) {
         continue;
       }
       if (sum_value <= 0) {

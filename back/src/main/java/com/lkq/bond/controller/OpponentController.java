@@ -46,21 +46,42 @@ public class OpponentController {
     opponent.priority = object.get("priority").getAsInt();
     opponent.bond_credit_limit = "";
     opponent.institution_credit_limit = "";
-    JsonArray arr1 = object.get("bond_credit_limit").getAsJsonArray();
+    opponent.issuer_prefer = "";
+    opponent.issuer_exclude = "";
+    JsonArray arr = object.get("bond_credit_limit").getAsJsonArray();
     StringBuilder bond_credit_limit = new StringBuilder();
-    for (JsonElement tmp : arr1) {
+    for (JsonElement tmp : arr) {
       bond_credit_limit.append(tmp.getAsString()).append(",");
     }
     if (bond_credit_limit.length() > 0) {
       opponent.bond_credit_limit = bond_credit_limit.substring(0, bond_credit_limit.lastIndexOf(","));
     }
-    JsonArray arr2 = object.get("institution_credit_limit").getAsJsonArray();
+
+    arr = object.get("institution_credit_limit").getAsJsonArray();
     StringBuilder institution_credit_limit = new StringBuilder();
-    for (JsonElement tmp : arr2) {
+    for (JsonElement tmp : arr) {
       institution_credit_limit.append(tmp.getAsString()).append(",");
     }
     if (institution_credit_limit.length() > 0) {
       opponent.institution_credit_limit = institution_credit_limit.substring(0, institution_credit_limit.lastIndexOf(","));
+    }
+
+    arr = object.get("issuer_prefer").getAsJsonArray();
+    StringBuilder issuer_prefer = new StringBuilder();
+    for (JsonElement tmp : arr) {
+      issuer_prefer.append(tmp.getAsString()).append(",");
+    }
+    if (issuer_prefer.length() > 0) {
+      opponent.issuer_prefer = issuer_prefer.substring(0, issuer_prefer.lastIndexOf(","));
+    }
+
+    arr = object.get("issuer_exclude").getAsJsonArray();
+    StringBuilder issuer_exclude = new StringBuilder();
+    for (JsonElement tmp : arr) {
+      issuer_exclude.append(tmp.getAsString()).append(",");
+    }
+    if (issuer_exclude.length() > 0) {
+      opponent.issuer_exclude = issuer_exclude.substring(0, issuer_exclude.lastIndexOf(","));
     }
 
     return opponentMapper.addOpponent(opponent);
@@ -73,25 +94,42 @@ public class OpponentController {
     opponent.id = object.get("id").getAsInt();
     opponent.name = object.get("name").getAsString();
     opponent.priority = object.get("priority").getAsInt();
-    JsonArray arr1 = object.get("bond_credit_limit").getAsJsonArray();
 
+    JsonArray arr = object.get("bond_credit_limit").getAsJsonArray();
     StringBuilder bond_credit_limit = new StringBuilder();
-    for (JsonElement tmp : arr1) {
+    for (JsonElement tmp : arr) {
       bond_credit_limit.append(tmp.getAsString()).append(",");
     }
     if (bond_credit_limit.length() > 0) {
       opponent.bond_credit_limit = bond_credit_limit.substring(0, bond_credit_limit.lastIndexOf(","));
     }
 
-    JsonArray arr2 = object.get("institution_credit_limit").getAsJsonArray();
+    arr = object.get("institution_credit_limit").getAsJsonArray();
     StringBuilder institution_credit_limit = new StringBuilder();
-    for (JsonElement tmp : arr2) {
+    for (JsonElement tmp : arr) {
       institution_credit_limit.append(tmp.getAsString()).append(",");
     }
     if (institution_credit_limit.length() > 0) {
       opponent.institution_credit_limit = institution_credit_limit.substring(0, institution_credit_limit.lastIndexOf(","));
     }
 
+    arr = object.get("issuer_prefer").getAsJsonArray();
+    StringBuilder issuer_prefer = new StringBuilder();
+    for (JsonElement tmp : arr) {
+      issuer_prefer.append(tmp.getAsString()).append(",");
+    }
+    if (issuer_prefer.length() > 0) {
+      opponent.issuer_prefer = issuer_prefer.substring(0, issuer_prefer.lastIndexOf(","));
+    }
+
+    arr = object.get("issuer_exclude").getAsJsonArray();
+    StringBuilder issuer_exclude = new StringBuilder();
+    for (JsonElement tmp : arr) {
+      issuer_exclude.append(tmp.getAsString()).append(",");
+    }
+    if (issuer_exclude.length() > 0) {
+      opponent.issuer_exclude = issuer_exclude.substring(0, issuer_exclude.lastIndexOf(","));
+    }
     return opponentMapper.updateOpponent(opponent);
   }
 

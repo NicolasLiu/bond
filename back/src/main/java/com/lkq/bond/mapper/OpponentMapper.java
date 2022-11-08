@@ -23,13 +23,14 @@ public interface OpponentMapper {
   public Opponent getOpponentById(int id);
 
   @Update("update opponent set name=#{name},priority=#{priority}," +
-      "bond_credit_limit=#{bond_credit_limit},institution_credit_limit=#{institution_credit_limit} where id=#{id}")
+      "bond_credit_limit=#{bond_credit_limit},institution_credit_limit=#{institution_credit_limit}," +
+      "issuer_prefer=#{issuer_prefer},issuer_exclude=#{issuer_exclude} where id=#{id}")
   public int updateOpponent(Opponent opponent);
 
    @Delete("delete from opponent where id = #{id}")
    public int deleteOpponentById(int id);
 
-   @Insert("insert into opponent(name,priority,bond_credit_limit,institution_credit_limit) values(#{name}, " +
-       "#{priority},#{bond_credit_limit},#{institution_credit_limit})")
+   @Insert("insert into opponent(name,priority,bond_credit_limit,institution_credit_limit,issuer_prefer,issuer_exclude) values(#{name}, " +
+       "#{priority},#{bond_credit_limit},#{institution_credit_limit},#{issuer_prefer},#{issuer_exclude})")
    public int addOpponent(Opponent opponent);
 }

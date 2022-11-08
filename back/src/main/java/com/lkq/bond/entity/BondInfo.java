@@ -34,4 +34,5 @@ public class BondInfo {
   public String rating_agency;
   public boolean have_credit;
   public String same_bonds_in_diff_market;
+  public String issuer_name;
 }

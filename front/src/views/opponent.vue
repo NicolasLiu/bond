@@ -10,6 +10,8 @@
 				<el-table-column prop="priority" label="优先级" align="center"></el-table-column>
 				<el-table-column prop="bond_credit_limit" label="债券评级限制" align="center"></el-table-column>
 				<el-table-column prop="institution_credit_limit" label="主体评级限制" align="center"></el-table-column>
+				<el-table-column prop="issuer_prefer" label="发行人偏好" align="center"></el-table-column>
+				<el-table-column prop="issuer_exclude" label="发行人黑名单" align="center"></el-table-column>
 
 				<el-table-column label="操作" width="220" align="center" fixed="right">
 					<template #default="scope">
@@ -70,6 +72,20 @@
 						</el-form-item>
 					</el-col>
 				</el-form-item>
+				<el-form-item>
+					<el-col :span="12">
+						<el-form-item label="发行人偏好" label-width="100px" prop="issuer_limit">
+							<el-select-v2 v-model="form.issuer_prefer" filterable :options="issuerSelectData" placeholder="搜索"
+								style="width: 240px" multiple />
+						</el-form-item>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item label="发行人黑名单" label-width="100px" prop="issuer_limit">
+							<el-select-v2 v-model="form.issuer_exclude" filterable :options="issuerSelectData" placeholder="搜索"
+								style="width: 240px" multiple />
+						</el-form-item>
+					</el-col>
+				</el-form-item>
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
@@ -121,6 +137,20 @@
 						</el-form-item>
 					</el-col>
 				</el-form-item>
+				<el-form-item>
+					<el-col :span="12">
+						<el-form-item label="发行人偏好" label-width="100px" prop="issuer_limit">
+							<el-select-v2 v-model="form.issuer_prefer" filterable :options="issuerSelectData" placeholder="搜索"
+								style="width: 240px" multiple />
+						</el-form-item>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item label="发行人黑名单" label-width="100px" prop="issuer_limit">
+							<el-select-v2 v-model="form.issuer_exclude" filterable :options="issuerSelectData" placeholder="搜索"
+								style="width: 240px" multiple />
+						</el-form-item>
+					</el-col>
+				</el-form-item>
 
 			</el-form>
 			<template #footer>
@@ -137,7 +167,7 @@
 import { ref, reactive } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Delete, Edit, Search, Plus } from '@element-plus/icons-vue';
-import { getAllOpponent, updateOpponent, deleteOpponent, addOpponent } from '../api/index';
+import { getAllOpponent, updateOpponent, deleteOpponent, addOpponent, getAllIssuer } from '../api/index';
 
 
 
@@ -148,7 +178,16 @@ interface TableItem {
 	priority: number;
 	bond_credit_limit: string;
 	institution_credit_limit: string;
+	issuer_prefer: string;
+	issuer_exclude: string;
 
+}
+interface Issuer {
+	issuer_name: string;
+}
+interface IssuerItem {
+	value: string;
+	label: string;
 }
 
 const query = reactive({
@@ -227,7 +266,9 @@ let form = reactive({
 	name: '',
 	priority: 0,
 	bond_credit_limit: [] as string[],
-	institution_credit_limit: [] as string[]
+	institution_credit_limit: [] as string[],
+	issuer_prefer: [] as string[],
+	issuer_exclude: [] as string[],
 });
 
 const handleCheckAllBondCredit = (val: boolean) => {
@@ -249,17 +290,31 @@ const handleCheckedInstitutionCreditChange = (value: string[]) => {
 	isIndeterminateInstitutionCredit.value = checkedCount > 0 && checkedCount < institutionCredits.length;
 }
 
-
+const filterIssuer = (query, item) => {
+	return item.initial.toLowerCase().includes(query.toLowerCase());
+}
 
 
 
 const tableData = ref<TableItem[]>([]);
+const issuerList = ref<Issuer[]>([]);
+const issuerSelectData = ref<IssuerItem[]>([]);
 const pageTotal = ref(0);
 // 获取表格数据
 const getData = () => {
 	getAllOpponent().then(res => {
 		tableData.value = res.data;
+		console.log(tableData.value);
 		pageTotal.value = res.data.pageTotal || 50;
+	});
+	getAllIssuer().then(res => {
+		issuerList.value = res.data;
+		issuerList.value.forEach((issuer, index) => {
+			issuerSelectData.value.push({
+				label: issuer.issuer_name,
+				value: issuer.issuer_name,
+			})
+		});
 	});
 };
 getData();
@@ -311,8 +366,10 @@ const handleEdit = (index: number, row: any) => {
 	form.id = row.id;
 	form.name = row.name;
 	form.priority = row.priority;
-	form.bond_credit_limit = row.bond_credit_limit.split(',');
-	form.institution_credit_limit = row.institution_credit_limit.split(',');
+	form.bond_credit_limit = !row.bond_credit_limit ? [] : row.bond_credit_limit.split(',');
+	form.institution_credit_limit = !row.institution_credit_limit ? [] : row.institution_credit_limit.split(',');
+	form.issuer_prefer = !row.issuer_prefer ? [] : row.issuer_prefer.split(',');
+	form.issuer_exclude = !row.issuer_exclude ? [] : row.issuer_exclude.split(',');
 	editVisible.value = true;
 };
 const saveEdit = () => {
@@ -326,7 +383,9 @@ const saveEdit = () => {
 	tableData.value[idx].priority = form.priority;
 	tableData.value[idx].bond_credit_limit = form.bond_credit_limit.join(",");
 	tableData.value[idx].institution_credit_limit = form.institution_credit_limit.join(",");
-	
+	tableData.value[idx].issuer_prefer = form.issuer_prefer.join(",");
+	tableData.value[idx].issuer_exclude = form.issuer_exclude.join(",");
+
 
 };
 const saveAdd = () => {
