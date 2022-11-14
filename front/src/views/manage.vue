@@ -208,7 +208,7 @@
 					<el-card header="分配情况" class="box-card">
 						<el-table :data="allocationData" border class="table" ref="allocTable"
 							header-cell-class-name="table-header" show-summary :summary-method="getAllocationSummaries">
-							<el-table-column prop="position.code" label="债券代码" align="center"></el-table-column>
+							<el-table-column prop="position.bond_info.bond_code" label="债券代码" align="center"></el-table-column>
 							<el-table-column prop="position.name" label="债券名称" align="center"></el-table-column>
 							<el-table-column prop="value" label="分配金额（万元）" align="center" width="100"></el-table-column>
 							<el-table-column prop="discount_rate" label="折价率" align="center" width="60">
@@ -235,6 +235,8 @@
 								type="primary" @click="handleCreateOrder" style="margin-top: 10px;">分配</el-button>
 							<el-button v-if="selectedApply != undefined && selectedApply.status == '已排券'" type="danger"
 								icon="Close" @click="handleCancelOrder" style="margin-top: 10px;">取消分配</el-button>
+							<el-button v-if="selectedApply != undefined" icon="CopyDocument"
+								type="primary" @click="handleCopyOrder" style="margin-top: 10px;">复制到剪贴板</el-button>
 
 						</div>
 					</el-card>
@@ -267,6 +269,7 @@ import type { UploadInstance, TableInstance } from 'element-plus'
 import { Delete, Edit, Search, Plus } from '@element-plus/icons-vue';
 import { getAllApply, getPosition, createOrder, cancelOrder, getOrder, autoCreateOrder } from '../api/index';
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults';
+import useClipboard from 'vue-clipboard3';
 
 const fileList = ref<UploadUserFile[]>([]);
 
@@ -383,6 +386,7 @@ const allocationData = ref<AllocationItem[]>([]);
 const uploadRef = ref<UploadInstance>();
 const applyTable = ref<TableInstance>();
 
+const { toClipboard } = useClipboard();
 
 const submitUpload = () => {
 	ElMessageBox.confirm('确定使用上传文件更新持仓吗？', '提示', {
@@ -460,7 +464,6 @@ const handleApplySelect = (val: ApplyItem) => {
 			allocation[selectedApply.value.id] = []
 		}
 		allocationData.value = allocation[selectedApply.value.id];
-		console.log(allocationData.value);
 	}
 	if (selectedApply.value.status == '已排券') {
 		getOrder(selectedApply.value.id).then(res => {
@@ -537,10 +540,15 @@ const handleUse = (index: number, row: any) => {
 
 	}
 	if (used) {
+		ElMessage.success('该债券已经使用');
 		return;
 	}
 
 	var last = selectedApply.value.value - allocation_value;
+	if (last <= 0) {
+		ElMessage.success('该融资申请已足额');
+		return;
+	}
 	last = last / selectedApply.value.discount_rate;
 	if (last <= 0) {
 		last = 0;
@@ -585,6 +593,25 @@ const handleDelete = (index: number) => {
 	allocationData.value.splice(index, 1);
 };
 
+const handleCopyOrder = async() => {
+	if (selectedApply.value != null) {
+		var sumValue = 0;
+		var sumDiscountValue = 0;
+		var contest = selectedApply.value.account.name + "\t" + selectedApply.value.opponent.name + "\t" + selectedApply.value.value + "\n";
+		for (var item in allocationData.value) {
+			sumValue += Number(allocationData.value[item].value);
+			sumDiscountValue += Number(allocationData.value[item].discount_value);
+			contest += allocationData.value[item].position.bond_info.bond_code + "\t" + allocationData.value[item].position.name + "\t" + allocationData.value[item].value + "\t" + allocationData.value[item].discount_rate + "\t" + allocationData.value[item].discount_value + "\n";
+		}
+		contest += "合计\t" + sumValue + "\t" + sumDiscountValue;
+		await toClipboard(contest);
+		ElMessage.success('复制到剪贴板');
+	} else {
+		ElMessage.success('无内容');
+	}
+
+};
+
 const handleCreateOrder = () => {
 	ElMessageBox.confirm('确定要分配吗？', '提示', {
 		type: 'warning'
@@ -624,17 +651,23 @@ const getAllocationSummaries = (param: SummaryMethodProps) => {
 	const { columns, data } = param;
 	const sums: string[] = [];
 	var sumValue = 0;
+	var sumDiscountValue = 0;
 
 	data.forEach((d) => {
-		sumValue += Number(d.discount_value);
+		sumDiscountValue += Number(d.discount_value);
+		sumValue += Number(d.value);
 	});
 	columns.forEach((column, index) => {
 		if (index === 0) {
 			sums[index] = '合计';
 			return;
 		}
-		if (index === 4) {
+		if (index === 2) {
 			sums[index] = String(sumValue);
+			return;
+		}
+		if (index === 4) {
+			sums[index] = String(sumDiscountValue);
 			return;
 		}
 		if (index === 5) {
